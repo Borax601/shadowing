@@ -278,6 +278,58 @@
     .popup-meaning { font-size: 16px; color: #e0e0f0; line-height: 1.7; }
     .popup-no-vocab { color: #505070; font-size: 14px; font-style: italic; }
 
+    /* ── Sync control ── */
+    .sync-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 4px 14px;
+      font-size: 12px;
+    }
+
+    .sync-label {
+      color: #6080a0;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .sync-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: #2d3561;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .sync-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #457b9d;
+      cursor: pointer;
+    }
+
+    .sync-slider::-moz-range-thumb {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #457b9d;
+      border: none;
+      cursor: pointer;
+    }
+
+    .sync-value {
+      color: #6baed6;
+      font-family: monospace;
+      font-size: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: 52px;
+      text-align: right;
+    }
+
     /* ── Scroll-to-top ── */
     .scroll-top-btn {
       position: fixed;
@@ -322,6 +374,13 @@
       <div class="progress-thumb" id="progressThumb"></div>
     </div>
     <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+  </div>
+
+  <div id="syncControl" class="sync-control" style="display:none">
+    <span class="sync-label">同期</span>
+    <input type="range" id="syncSlider" class="sync-slider"
+           min="-50" max="50" value="0" step="1">
+    <span class="sync-value" id="syncValue">±0.00秒</span>
   </div>
 
   <div class="english-text" id="englishText"></div>
@@ -406,10 +465,12 @@ if (HAS_AUDIO) {
   const audioFile = 'audio/day' + dayParam.replace('.', '_') + '.mp3';
   audio.src = audioFile;
   document.getElementById('playerWrap').style.display = 'flex';
+  document.getElementById('syncControl').style.display = 'flex';
 
   // Check if audio file actually exists (graceful fallback)
   audio.addEventListener('error', () => {
     document.getElementById('playerWrap').style.display = 'none';
+    document.getElementById('syncControl').style.display = 'none';
     document.getElementById('noAudioNotice').style.display = 'block';
   });
 } else {
@@ -559,22 +620,50 @@ function seekToSegment(idx) {
   if (audio.paused) audio.play();
 }
 
-// ─── Audio: highlight & progress ─────────────────────────────────────────────
-let activeIdx = -1;
+// ─── Sync offset (同期調整) ───────────────────────────────────────────────────
+// JSONタイムスタンプは -0.3s 補正済み。スライダーで追加の微調整が可能。
+// 正の値 = さらに早める、負の値 = 遅らせる
+let syncOffset = 0.0;
 
-audio.addEventListener('timeupdate', () => {
-  const t = audio.currentTime;
+const syncSlider  = document.getElementById('syncSlider');
+const syncValueEl = document.getElementById('syncValue');
+syncSlider.value  = '0';
+syncValueEl.textContent = '±0.00秒';
+
+syncSlider.addEventListener('input', () => {
+  syncOffset = syncSlider.value / 100;
+  if (syncOffset === 0) {
+    syncValueEl.textContent = '±0.00秒';
+  } else {
+    const sign = syncOffset > 0 ? '早' : '遅';
+    syncValueEl.textContent = sign + ' ' + Math.abs(syncOffset).toFixed(2) + '秒';
+  }
+  updateHighlight();
+});
+
+// ─── Audio: highlight & progress (requestAnimationFrame) ─────────────────────
+let activeIdx = -1;
+let rafId     = null;
+
+function updateHighlight() {
+  const t   = audio.currentTime;
+  const adj = t + syncOffset;     // オフセット適用済み時刻でセグメント判定
+
+  // プログレスバー更新
   if (audio.duration) {
     const pct = (t / audio.duration) * 100;
     progressBar.style.width  = pct + '%';
     progressThumb.style.left = pct + '%';
     timeDisplay.textContent  = fmtTime(t) + ' / ' + fmtTime(audio.duration);
   }
+
+  // セグメント判定（オフセット適用）
   let found = -1;
   for (let i = 0; i < TIMESTAMPS.length; i++) {
     const s = TIMESTAMPS[i];
-    if (t >= s.start && t <= s.end + 0.15) { found = i; break; }
+    if (adj >= s.start && adj <= s.end + 0.15) { found = i; break; }
   }
+
   if (found !== activeIdx) {
     if (activeIdx >= 0) {
       const prev = englishText.querySelector(`.segment[data-idx="${activeIdx}"]`);
@@ -589,9 +678,22 @@ audio.addEventListener('timeupdate', () => {
       }
     }
   }
-});
+}
+
+function rafTick() {
+  updateHighlight();
+  rafId = requestAnimationFrame(rafTick);
+}
+
+function startRAF() { if (!rafId) rafId = requestAnimationFrame(rafTick); }
+function stopRAF()  { if (rafId)  { cancelAnimationFrame(rafId); rafId = null; } }
+
+audio.addEventListener('play',   startRAF);
+audio.addEventListener('pause',  () => { stopRAF(); updateHighlight(); });
+audio.addEventListener('seeked', updateHighlight);   // シーク後も即更新
 
 audio.addEventListener('ended', () => {
+  stopRAF();
   btnPlay.innerHTML = '&#9654;';
   if (activeIdx >= 0) {
     const el = englishText.querySelector(`.segment[data-idx="${activeIdx}"]`);

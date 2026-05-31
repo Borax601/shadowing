@@ -43,6 +43,34 @@ DAY_CONFIG = {
             "They make balloon animals."
         ),
     },
+    "2": {
+        "audio":  "audio/day2.mp3",
+        "output": "audio/day2_timestamps.json",
+        "english": (
+            "But what do we do / for a living? //"
+            "What exactly / do the people watching this / do every day? //"
+            "And I want to argue / that what we do / is we try to change everything. //"
+            "That we try to find / a piece of the status quo -- "
+            "/ something that bothers us, / something that needs to be improved, "
+            "/ something that is itching to be changed -- / and we change it. //"
+            "We try to make / big, permanent, important change. //"
+            "But we don't think about it / that way."
+        ),
+    },
+    "3": {
+        "audio":  "audio/day3.mp3",
+        "output": "audio/day3_timestamps.json",
+        "english": (
+            "First, / about a guy named Nathan Winograd. //"
+            "Nathan was / the number two person / at the San Francisco SPCA. //"
+            "And what you may not know / about the history of the SPCA is, "
+            "/ it was founded / to kill dogs and cats. //"
+            "Cities gave them a charter / to get rid of the stray animals "
+            "/ on the street / and destroy them. //"
+            "In a typical year / four million dogs and cats / were killed, "
+            "/ most of them / within 24 hours / of being scooped off of the street."
+        ),
+    },
 }
 
 

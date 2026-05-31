@@ -1,5 +1,5 @@
 // lessons_data.js
-// To add a new day: add to LESSONS_DATA, add timestamps to TIMESTAMPS_MAP
+// Timestamps adjusted -0.3s from Whisper output to match actual speech onset
 
 const LESSONS_DATA = [
   {
@@ -1592,8 +1592,10 @@ const LESSONS_DATA = [
 ];
 
 const TIMESTAMPS_MAP = {
-  "1":   [{"index":0,"text":"So sometimes","start":0.84,"end":1.92},{"index":1,"text":"I get invited","start":1.92,"end":2.48},{"index":2,"text":"to give weird talks.","start":2.48,"end":3.72},{"index":3,"text":"I got invited","start":4.52,"end":5.16},{"index":4,"text":"to speak","start":5.16,"end":5.86},{"index":5,"text":"to the people","start":5.86,"end":6.44},{"index":6,"text":"who dress up","start":6.44,"end":7.5},{"index":7,"text":"in big stuffed animal costumes","start":7.5,"end":10.06},{"index":8,"text":"to perform","start":10.06,"end":10.7},{"index":9,"text":"at sporting events.","start":10.7,"end":11.9},{"index":10,"text":"Unfortunately","start":12.82,"end":13.3},{"index":11,"text":"I couldn't go.","start":13.3,"end":14.52},{"index":12,"text":"But it got me thinking","start":14.52,"end":16.6},{"index":13,"text":"about the fact","start":16.6,"end":17.74},{"index":14,"text":"that these guys,","start":17.74,"end":18.54},{"index":15,"text":"at least most of them,","start":18.66,"end":19.66},{"index":16,"text":"know what it is","start":20.04,"end":20.9},{"index":17,"text":"that they do for a living.","start":20.9,"end":21.94},{"index":18,"text":"What they do is","start":22.06,"end":23.3},{"index":19,"text":"they dress up as stuffed animals","start":23.3,"end":25.4},{"index":20,"text":"and entertain people","start":25.4,"end":26.32},{"index":21,"text":"at sporting events.","start":26.32,"end":26.98}],
-  "1.5": [{"index":0,"text":"Shortly after that","start":0.58,"end":1.46},{"index":1,"text":"I got invited","start":1.46,"end":2.18},{"index":2,"text":"to speak","start":2.18,"end":3.1},{"index":3,"text":"at the convention","start":3.1,"end":3.98},{"index":4,"text":"of the people","start":3.98,"end":4.6},{"index":5,"text":"who make balloon animals.","start":4.6,"end":6.24},{"index":6,"text":"And again,","start":7.02,"end":7.36},{"index":7,"text":"I couldn't go.","start":7.4,"end":7.88},{"index":8,"text":"But it's a fascinating group.","start":7.9,"end":9.04},{"index":9,"text":"They make balloon animals.","start":9.18,"end":9.94},{"index":10,"text":"There is a big schism","start":9.94,"end":10.94},{"index":11,"text":"between the ones","start":10.82,"end":11.36},{"index":12,"text":"who make gospel animals","start":11.36,"end":12.5},{"index":13,"text":"and porn animals,","start":12.5,"end":13.48},{"index":14,"text":"but -- (Laughter)","start":13.48,"end":14.48},{"index":15,"text":"they do a lot of really cool stuff","start":15.24,"end":17.6},{"index":16,"text":"with balloons.","start":17.6,"end":18.28},{"index":17,"text":"Sometimes they get in trouble,","start":18.38,"end":19.3},{"index":18,"text":"but not often.","start":19.3,"end":20.08},{"index":19,"text":"And the other thing","start":20.94,"end":22.22},{"index":20,"text":"about these guys is,","start":22.22,"end":23.24},{"index":21,"text":"they also know","start":23.24,"end":24.2},{"index":22,"text":"what they do for a living.","start":24.2,"end":25.24},{"index":23,"text":"They make balloon animals.","start":25.5,"end":27.94}],
+  "1":   [{"index":0,"text":"So sometimes","start":0.54,"end":1.62},{"index":1,"text":"I get invited","start":1.62,"end":2.18},{"index":2,"text":"to give weird talks.","start":2.18,"end":3.42},{"index":3,"text":"I got invited","start":4.22,"end":4.86},{"index":4,"text":"to speak","start":4.86,"end":5.56},{"index":5,"text":"to the people","start":5.56,"end":6.14},{"index":6,"text":"who dress up","start":6.14,"end":7.2},{"index":7,"text":"in big stuffed animal costumes","start":7.2,"end":9.76},{"index":8,"text":"to perform","start":9.76,"end":10.4},{"index":9,"text":"at sporting events.","start":10.4,"end":11.6},{"index":10,"text":"Unfortunately","start":12.52,"end":13.0},{"index":11,"text":"I couldn't go.","start":13.0,"end":14.22},{"index":12,"text":"But it got me thinking","start":14.22,"end":16.3},{"index":13,"text":"about the fact","start":16.3,"end":17.44},{"index":14,"text":"that these guys,","start":17.44,"end":18.24},{"index":15,"text":"at least most of them,","start":18.36,"end":19.36},{"index":16,"text":"know what it is","start":19.74,"end":20.6},{"index":17,"text":"that they do for a living.","start":20.6,"end":21.64},{"index":18,"text":"What they do is","start":21.76,"end":23.0},{"index":19,"text":"they dress up as stuffed animals","start":23.0,"end":25.1},{"index":20,"text":"and entertain people","start":25.1,"end":26.02},{"index":21,"text":"at sporting events.","start":26.02,"end":26.68}],
+  "1.5": [{"index":0,"text":"Shortly after that","start":0.28,"end":1.16},{"index":1,"text":"I got invited","start":1.16,"end":1.88},{"index":2,"text":"to speak","start":1.88,"end":2.8},{"index":3,"text":"at the convention","start":2.8,"end":3.68},{"index":4,"text":"of the people","start":3.68,"end":4.3},{"index":5,"text":"who make balloon animals.","start":4.3,"end":5.94},{"index":6,"text":"And again,","start":6.72,"end":7.06},{"index":7,"text":"I couldn't go.","start":7.1,"end":7.58},{"index":8,"text":"But it's a fascinating group.","start":7.6,"end":8.74},{"index":9,"text":"They make balloon animals.","start":8.88,"end":9.64},{"index":10,"text":"There is a big schism","start":9.64,"end":10.64},{"index":11,"text":"between the ones","start":10.52,"end":11.06},{"index":12,"text":"who make gospel animals","start":11.06,"end":12.2},{"index":13,"text":"and porn animals,","start":12.2,"end":13.18},{"index":14,"text":"but -- (Laughter)","start":13.18,"end":14.18},{"index":15,"text":"they do a lot of really cool stuff","start":14.94,"end":17.3},{"index":16,"text":"with balloons.","start":17.3,"end":17.98},{"index":17,"text":"Sometimes they get in trouble,","start":18.08,"end":19.0},{"index":18,"text":"but not often.","start":19.0,"end":19.78},{"index":19,"text":"And the other thing","start":20.64,"end":21.92},{"index":20,"text":"about these guys is,","start":21.92,"end":22.94},{"index":21,"text":"they also know","start":22.94,"end":23.9},{"index":22,"text":"what they do for a living.","start":23.9,"end":24.94},{"index":23,"text":"They make balloon animals.","start":25.2,"end":27.64}],
+  "2":   [{"index":0,"text":"But what do we do","start":0.0,"end":1.16},{"index":1,"text":"for a living?","start":1.16,"end":1.82},{"index":2,"text":"What exactly","start":2.28,"end":3.3},{"index":3,"text":"do the people watching this","start":3.3,"end":4.44},{"index":4,"text":"do every day?","start":4.44,"end":6.46},{"index":5,"text":"And I want to argue","start":6.46,"end":8.34},{"index":6,"text":"that what we do","start":8.34,"end":9.78},{"index":7,"text":"is we try to change everything.","start":9.78,"end":11.76},{"index":8,"text":"That we try to find","start":12.46,"end":13.8},{"index":9,"text":"a piece of the status quo --","start":13.8,"end":14.8},{"index":10,"text":"something that bothers us,","start":15.2,"end":16.34},{"index":11,"text":"something that needs to be improved,","start":16.34,"end":17.6},{"index":12,"text":"something that is itching to be changed --","start":17.6,"end":18.6},{"index":13,"text":"and we change it.","start":20.06,"end":21.24},{"index":14,"text":"We try to make","start":21.56,"end":22.22},{"index":15,"text":"big, permanent, important change.","start":22.22,"end":25.66},{"index":16,"text":"But we don't think about it","start":25.66,"end":27.46},{"index":17,"text":"that way.","start":27.46,"end":27.68}],
+  "3":   [{"index":0,"text":"First,","start":0.0,"end":0.38},{"index":1,"text":"about a guy named Nathan Winograd.","start":0.38,"end":1.7},{"index":2,"text":"Nathan was","start":2.72,"end":3.02},{"index":3,"text":"the number two person","start":3.02,"end":3.86},{"index":4,"text":"at the San Francisco SPCA.","start":3.86,"end":5.62},{"index":5,"text":"And what you may not know","start":6.32,"end":7.46},{"index":6,"text":"about the history of the SPCA is,","start":7.46,"end":8.74},{"index":7,"text":"it was founded","start":8.74,"end":9.66},{"index":8,"text":"to kill dogs and cats.","start":9.66,"end":12.08},{"index":9,"text":"Cities gave them a charter","start":13.44,"end":15.22},{"index":10,"text":"to get rid of the stray animals","start":15.22,"end":16.7},{"index":11,"text":"on the street","start":16.7,"end":17.32},{"index":12,"text":"and destroy them.","start":17.32,"end":18.36},{"index":13,"text":"In a typical year","start":19.12,"end":19.94},{"index":14,"text":"four million dogs and cats","start":19.94,"end":21.56},{"index":15,"text":"were killed,","start":21.56,"end":22.08},{"index":16,"text":"most of them","start":22.16,"end":22.72},{"index":17,"text":"within 24 hours","start":22.72,"end":23.82},{"index":18,"text":"of being scooped off of the street.","start":23.82,"end":24.82}],
 };
 
 const GRAMMAR_MAP = {
@@ -1652,6 +1654,66 @@ const GRAMMAR_MAP = {
         "segIndices": [
             21,
             22
+        ]
+    }
+],
+  "2":   [
+    {
+        "id": "g1",
+        "label": "文法①【I want to argue that 構文】",
+        "content": "\"I want to argue that ...\" はプレゼン・講演で頻出の表現。I think より論理的・説得的なニュアンスで「〜と主張したい」という意味。TEDトーク登壇者がよく使う定番フレーズです。",
+        "segIndices": [
+            5,
+            6,
+            7
+        ]
+    },
+    {
+        "id": "g2",
+        "label": "文法⑤【that 節の分割提示】",
+        "content": "\"I want to argue that X. That we try to find Y.\" の2文目の That は argue that の that と同じ。長い that 節を分けて提示する話し言葉のテクニックで、聴衆に考える間を与えます。",
+        "segIndices": [
+            8,
+            9
+        ]
+    },
+    {
+        "id": "g3",
+        "label": "文法②【something that の並列（アナフォラ）】",
+        "content": "\"something that bothers us / needs to be improved / is itching to be changed\" は同じ構造（something that＋動詞）を3回繰り返す修辞技法（アナフォラ）。聴衆の記憶に残りやすくスピーチで非常に効果的です。",
+        "segIndices": [
+            10,
+            11,
+            12
+        ]
+    }
+],
+  "3":   [
+    {
+        "id": "g1",
+        "label": "文法①【may not know の推量】",
+        "content": "\"what you may not know\" の may は「知らないかもしれない」という推量。might not know より少し確信度が高いニュアンス。聴衆を引き込む導入表現として講演で頻出です。",
+        "segIndices": [
+            5,
+            6
+        ]
+    },
+    {
+        "id": "g2",
+        "label": "文法②【it was founded to 不定詞（目的）】",
+        "content": "\"it was founded to kill\" は受動態＋to不定詞（目的）。「〜するために設立された」。to不定詞は目的・意図を示す副詞的用法。founded for killing（動名詞）より to不定詞の方が目的を明確に示します。",
+        "segIndices": [
+            7,
+            8
+        ]
+    },
+    {
+        "id": "g3",
+        "label": "文法④【within＋時間＋of＋動名詞】",
+        "content": "\"within 24 hours of being scooped\" は「〜されてから24時間以内に」。within＋時間＋of＋動名詞で「〜してからXX以内に」を表す重要表現。例：within a week of arriving（到着して1週間以内に）",
+        "segIndices": [
+            17,
+            18
         ]
     }
 ]
