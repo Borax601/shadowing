@@ -99,6 +99,30 @@
     .btn-play:hover { background: #c1121f; }
     .btn-play:active { transform: scale(0.93); }
 
+    .btn-skip {
+      background: #1e3055;
+      border: 1px solid #2d4a70;
+      border-radius: 10px;
+      min-width: 44px;
+      height: 44px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #6baed6;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+      white-space: nowrap;
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
+      transition: background 0.1s, color 0.1s;
+    }
+    .btn-skip:hover  { background: #263d6a; }
+    .btn-skip:active { background: #2d5a8e; color: #fff; }
+
     .progress-wrap {
       flex: 1;
       height: 8px;
@@ -368,7 +392,9 @@
   </div>
 
   <div id="playerWrap" class="player" style="display:none">
+    <button class="btn-skip" id="btnBack" title="1秒戻す">&#9664; 1秒</button>
     <button class="btn-play" id="btnPlay" onclick="togglePlay()" title="再生 / 一時停止">&#9654;</button>
+    <button class="btn-skip" id="btnFwd"  title="1秒進む">1秒 &#9654;</button>
     <div class="progress-wrap" id="progressWrap">
       <div class="progress-bar" id="progressBar"></div>
       <div class="progress-thumb" id="progressThumb"></div>
@@ -618,6 +644,45 @@ function seekToSegment(idx) {
   if (!HAS_AUDIO || idx < 0 || idx >= TIMESTAMPS.length) return;
   audio.currentTime = TIMESTAMPS[idx].start;
   if (audio.paused) audio.play();
+}
+
+// ─── Skip buttons (+/- 1 second) ─────────────────────────────────────────────
+function skipAudio(sec) {
+  if (!HAS_AUDIO) return;
+  audio.currentTime = Math.max(0, Math.min(audio.duration || 0, audio.currentTime + sec));
+  updateHighlight();
+}
+
+function flashBtn(btn) {
+  btn.style.background = '#457b9d';
+  btn.style.color = '#fff';
+  setTimeout(() => { btn.style.background = ''; btn.style.color = ''; }, 180);
+}
+
+function addSkipListener(btnId, sec) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  let touchFired = false;
+
+  // touchstart: 即時反応（300ms遅延なし）
+  btn.addEventListener('touchstart', (e) => {
+    e.preventDefault();      // クリックイベントの二重発火を防ぐ
+    touchFired = true;
+    skipAudio(sec);
+    flashBtn(btn);
+  }, { passive: false });
+
+  // click: デスクトップ用フォールバック
+  btn.addEventListener('click', () => {
+    if (touchFired) { touchFired = false; return; }
+    skipAudio(sec);
+    flashBtn(btn);
+  });
+}
+
+if (HAS_AUDIO) {
+  addSkipListener('btnBack', -1);
+  addSkipListener('btnFwd',  +1);
 }
 
 // ─── Sync offset (同期調整) ───────────────────────────────────────────────────
