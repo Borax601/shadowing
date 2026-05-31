@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>シャドーイング</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      color: #e8e8e8;
+      font-family: Georgia, 'Noto Serif JP', serif;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+    }
+
+    /* ── Back button ── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #6baed6;
+      font-size: 14px;
+      text-decoration: none;
+      padding: 10px 0 20px;
+      cursor: pointer;
+    }
+    .back-btn:hover { color: #9dcae8; }
+
+    /* ── Header ── */
+    header { text-align: center; padding: 4px 0 20px; }
+
+    .day-badge {
+      display: inline-block;
+      background: #e63946;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      padding: 4px 14px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+    }
+
+    h1.title {
+      font-size: clamp(17px, 4vw, 24px);
+      color: #f4d03f;
+      line-height: 1.4;
+      font-weight: normal;
+    }
+
+    /* ── No-audio notice ── */
+    .no-audio-notice {
+      background: #16213e;
+      border: 1px dashed #457b9d;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #6baed6;
+      font-size: 14px;
+      text-align: center;
+      margin: 16px 0;
+    }
+
+    /* ── Player ── */
+    .player {
+      background: #16213e;
+      border: 1px solid #457b9d;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .btn-play {
+      background: #e63946;
+      border: none;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      font-size: 17px;
+      color: #fff;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.1s;
+      padding-left: 2px;
+    }
+    .btn-play:hover { background: #c1121f; }
+    .btn-play:active { transform: scale(0.93); }
+
+    .progress-wrap {
+      flex: 1;
+      height: 8px;
+      background: #2d3561;
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #457b9d, #6baed6);
+      border-radius: 4px;
+      width: 0%;
+      pointer-events: none;
+    }
+
+    .progress-thumb {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      background: #f4d03f;
+      border-radius: 50%;
+      pointer-events: none;
+      box-shadow: 0 0 6px rgba(244,208,63,0.6);
+    }
+
+    .time-display {
+      font-size: 12px;
+      color: #8080a0;
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-family: monospace;
+    }
+
+    /* ── English Text ── */
+    .english-text {
+      font-size: clamp(16px, 3vw, 21px);
+      line-height: 2.4;
+      padding: 10px 4px 20px;
+    }
+
+    .segment {
+      display: inline;
+      border-radius: 5px;
+      padding: 3px 5px;
+      margin: 0 1px;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .segment.active { background: #f4d03f; color: #1a1a2e; }
+
+    .seg-break { display: block; height: 10px; }
+
+    .word {
+      cursor: pointer;
+      border-bottom: 1px dotted transparent;
+      transition: border-color 0.15s;
+    }
+    .word:hover { border-bottom-color: #f4d03f; }
+    .segment.active .word:hover { border-bottom-color: #1a1a2e; }
+
+    /* ── Grammar annotations ── */
+    .has-grammar {
+      border-bottom: 2px dotted #4caf7d;
+      cursor: pointer;
+    }
+    .segment.active.has-grammar { border-bottom-color: rgba(26,26,46,0.5); }
+
+    /* Grammar popup variant */
+    .popup--grammar { border-color: #2d6a4f; }
+    .popup--grammar .popup-word { color: #4caf7d; }
+    .popup--grammar .popup-pron { color: #4caf7d; opacity: 0.7; }
+
+    /* ── Collapsible sections ── */
+    .section-details {
+      margin: 14px 0;
+      border: 1px solid #253350;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .section-details summary {
+      padding: 13px 18px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      color: #6baed6;
+      background: #16213e;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    .section-details summary::-webkit-details-marker { display: none; }
+    .section-details summary::before {
+      content: '▶';
+      font-size: 9px;
+      transition: transform 0.2s;
+      color: #457b9d;
+    }
+    .section-details[open] summary::before { transform: rotate(90deg); }
+    .section-details summary:hover { background: #1a2840; }
+
+    .japanese-text {
+      padding: 16px 20px;
+      line-height: 2.0;
+      font-size: 15px;
+      color: #b8b8d0;
+      background: #111828;
+    }
+
+    .advice-list { padding: 12px 14px; background: #111828; }
+    .advice-item {
+      background: #0d2d4a;
+      border-left: 3px solid #2d6a4f;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .advice-item:last-child { margin-bottom: 0; }
+    .advice-label {
+      font-size: 11px;
+      font-weight: bold;
+      color: #4caf7d;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .advice-content { font-size: 14px; line-height: 1.8; color: #b0b0c8; }
+
+    /* ── Popups ── */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 1000;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px;
+    }
+    .popup-overlay.show { display: flex; }
+
+    .popup {
+      background: #16213e;
+      border: 1px solid #457b9d;
+      border-radius: 18px 18px 14px 14px;
+      padding: 22px 22px 26px;
+      width: 100%;
+      max-width: 560px;
+      position: relative;
+      animation: slideUp 0.2s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(24px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .popup-close {
+      position: absolute;
+      top: 12px; right: 14px;
+      background: #253350;
+      border: none;
+      color: #a0a0c0;
+      font-size: 15px;
+      cursor: pointer;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .popup-close:hover { background: #3a4a6a; color: #fff; }
+    .popup-word { font-size: 19px; font-weight: bold; color: #f4d03f; margin-bottom: 6px; padding-right: 36px; }
+    .popup-pron { font-size: 14px; color: #6baed6; margin-bottom: 10px; font-family: monospace; }
+    .popup-meaning { font-size: 16px; color: #e0e0f0; line-height: 1.7; }
+    .popup-no-vocab { color: #505070; font-size: 14px; font-style: italic; }
+
+    /* ── Scroll-to-top ── */
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 20px; right: 20px;
+      background: #457b9d;
+      border: none; color: #fff;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 100;
+    }
+    .scroll-top-btn.visible { opacity: 1; }
+
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      .player { gap: 8px; padding: 12px; }
+      .btn-play { width: 40px; height: 40px; font-size: 15px; }
+      .popup { border-radius: 14px 14px 10px 10px; padding: 18px 16px 22px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a class="back-btn" href="index.html">&#8592; デイ一覧に戻る</a>
+
+  <header>
+    <div class="day-badge" id="dayBadge">DAY —</div>
+    <h1 class="title" id="lessonTitle">読み込み中…</h1>
+  </header>
+
+  <div id="noAudioNotice" class="no-audio-notice" style="display:none">
+    🎵 この日の音声ファイルはまだ準備中です。テキストで学習できます。
+  </div>
+
+  <div id="playerWrap" class="player" style="display:none">
+    <button class="btn-play" id="btnPlay" onclick="togglePlay()" title="再生 / 一時停止">&#9654;</button>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar" id="progressBar"></div>
+      <div class="progress-thumb" id="progressThumb"></div>
+    </div>
+    <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+  </div>
+
+  <div class="english-text" id="englishText"></div>
+
+  <details class="section-details">
+    <summary>日本語訳</summary>
+    <p class="japanese-text" id="japaneseText"></p>
+  </details>
+
+  <details class="section-details">
+    <summary>発音・文法アドバイス</summary>
+    <div class="advice-list" id="adviceList"></div>
+  </details>
+</div>
+
+<!-- Vocab popup -->
+<div class="popup-overlay" id="popupOverlay" onclick="closePopup()">
+  <div class="popup" onclick="event.stopPropagation()">
+    <button class="popup-close" onclick="closePopup()">✕</button>
+    <div class="popup-word" id="popupWord"></div>
+    <div class="popup-pron"  id="popupPron"></div>
+    <div class="popup-meaning" id="popupMeaning"></div>
+  </div>
+</div>
+
+<!-- Grammar popup -->
+<div class="popup-overlay" id="grammarPopupOverlay" onclick="closeGrammarPopup()">
+  <div class="popup popup--grammar" onclick="event.stopPropagation()">
+    <button class="popup-close" onclick="closeGrammarPopup()">✕</button>
+    <div class="popup-word" id="grammarPopupLabel"></div>
+    <div class="popup-meaning" id="grammarPopupContent"></div>
+  </div>
+</div>
+
+<button class="scroll-top-btn" id="scrollTopBtn"
+        onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<audio id="audio" preload="metadata"></audio>
+
+<script src="lessons_data.js"></script>
+<script>
+// ─── URL param → lesson data ──────────────────────────────────────────────────
+const dayParam = new URLSearchParams(window.location.search).get('day') || '1';
+
+const LESSON = LESSONS_DATA.find(l => String(l.day) === dayParam);
+if (!LESSON) {
+  document.getElementById('lessonTitle').textContent = 'データが見つかりません (day=' + dayParam + ')';
+  throw new Error('Lesson not found: day=' + dayParam);
+}
+
+const TIMESTAMPS        = TIMESTAMPS_MAP[dayParam] || [];
+const GRAMMAR_ANNOTATIONS = (GRAMMAR_MAP[dayParam] || []);
+const HAS_AUDIO         = TIMESTAMPS.length > 0;
+
+// ─── Grammar index ────────────────────────────────────────────────────────────
+const grammarBySegIdx = {};
+const grammarLastSeg  = {};
+GRAMMAR_ANNOTATIONS.forEach(g => {
+  g.segIndices.forEach(i => { grammarBySegIdx[i] = g.id; });
+  grammarLastSeg[g.segIndices[g.segIndices.length - 1]] = g.id;
+});
+
+// ─── DOM refs ─────────────────────────────────────────────────────────────────
+const audio         = document.getElementById('audio');
+const btnPlay       = document.getElementById('btnPlay');
+const progressBar   = document.getElementById('progressBar');
+const progressThumb = document.getElementById('progressThumb');
+const progressWrap  = document.getElementById('progressWrap');
+const timeDisplay   = document.getElementById('timeDisplay');
+const englishText   = document.getElementById('englishText');
+const popupOverlay  = document.getElementById('popupOverlay');
+
+// ─── Build header ─────────────────────────────────────────────────────────────
+document.title = 'Day ' + dayParam + ' — ' + LESSON.title;
+document.getElementById('dayBadge').textContent = 'DAY ' + dayParam;
+document.getElementById('lessonTitle').textContent = LESSON.title;
+document.getElementById('japaneseText').textContent = LESSON.japanese;
+
+// ─── Audio setup ──────────────────────────────────────────────────────────────
+if (HAS_AUDIO) {
+  // "1.5" → "day1_5.mp3" のようにドットをアンダースコアに変換
+  const audioFile = 'audio/day' + dayParam.replace('.', '_') + '.mp3';
+  audio.src = audioFile;
+  document.getElementById('playerWrap').style.display = 'flex';
+
+  // Check if audio file actually exists (graceful fallback)
+  audio.addEventListener('error', () => {
+    document.getElementById('playerWrap').style.display = 'none';
+    document.getElementById('noAudioNotice').style.display = 'block';
+  });
+} else {
+  document.getElementById('noAudioNotice').style.display = 'block';
+}
+
+// ─── Advice list ──────────────────────────────────────────────────────────────
+const adviceList = document.getElementById('adviceList');
+LESSON.advice.forEach(a => {
+  const item = document.createElement('div');
+  item.className = 'advice-item';
+  item.innerHTML = `<div class="advice-label">${esc(a.label)}</div><div class="advice-content">${esc(a.content)}</div>`;
+  adviceList.appendChild(item);
+});
+
+// ─── English text: build segment spans ───────────────────────────────────────
+// If timestamps exist, split by them; otherwise show plain text with slash segments
+const SENTENCE_ENDS = new Set();
+
+if (HAS_AUDIO) {
+  // Detect sentence-ending segments (text ends with . ! ?)
+  TIMESTAMPS.forEach((seg, i) => {
+    if (/[.!?]$/.test(seg.text.trim())) SENTENCE_ENDS.add(i);
+  });
+
+  TIMESTAMPS.forEach((seg, i) => {
+    const span = document.createElement('span');
+    span.className = 'segment';
+    span.dataset.idx = i;
+
+    if (grammarBySegIdx[i] !== undefined) {
+      span.classList.add('has-grammar');
+      span.dataset.grammarId = grammarBySegIdx[i];
+    }
+
+    seg.text.split(' ').forEach((w, wi, arr) => {
+      const wSpan = document.createElement('span');
+      wSpan.className = 'word';
+      wSpan.textContent = w + (wi < arr.length - 1 ? ' ' : '');
+      span.appendChild(wSpan);
+    });
+
+    englishText.appendChild(span);
+    englishText.appendChild(document.createTextNode(' '));
+
+    if (SENTENCE_ENDS.has(i)) {
+      englishText.appendChild(document.createElement('br'));
+      const gap = document.createElement('span');
+      gap.className = 'seg-break';
+      englishText.appendChild(gap);
+    }
+  });
+} else {
+  // No timestamps: render slash-separated plain segments
+  const rawSegs = LESSON.english.split(/\s*\/\/?\s*/).filter(s => s.trim());
+  rawSegs.forEach((seg, i) => {
+    const span = document.createElement('span');
+    span.className = 'segment';
+    span.dataset.idx = i;
+    seg.trim().split(' ').forEach((w, wi, arr) => {
+      const wSpan = document.createElement('span');
+      wSpan.className = 'word';
+      wSpan.textContent = w + (wi < arr.length - 1 ? ' ' : '');
+      span.appendChild(wSpan);
+    });
+    englishText.appendChild(span);
+    englishText.appendChild(document.createTextNode(' '));
+    if (/[.!?]$/.test(seg.trim())) {
+      englishText.appendChild(document.createElement('br'));
+      const gap = document.createElement('span');
+      gap.className = 'seg-break';
+      englishText.appendChild(gap);
+    }
+  });
+}
+
+// ─── Vocab lookup ─────────────────────────────────────────────────────────────
+function findVocab(clickedWord) {
+  const cw = clickedWord.toLowerCase().replace(/[.,!?;:'"]/g, '');
+  if (cw.length < 2) return null;
+  let best = null, bestScore = 0;
+  for (const v of LESSON.vocab) {
+    const vWords = v.word.toLowerCase()
+      .replace(/[~（）()]/g, ' ')
+      .split(/[\s\-]+/)
+      .filter(x => x.length > 0);
+    if (vWords.includes(cw)) {
+      const score = v.word.length;
+      if (score > bestScore) { bestScore = score; best = v; }
+    }
+  }
+  return best;
+}
+
+// ─── Vocab popup ──────────────────────────────────────────────────────────────
+function showPopup(word) {
+  const v = findVocab(word);
+  const clean = word.replace(/[.,!?;:]/g, '');
+  document.getElementById('popupWord').textContent  = v ? v.word : clean;
+  document.getElementById('popupPron').textContent  = v ? v.pronunciation : '';
+  document.getElementById('popupMeaning').innerHTML = v
+    ? `<span>${esc(v.meaning)}</span>`
+    : `<span class="popup-no-vocab">語注なし</span>`;
+  popupOverlay.classList.add('show');
+}
+function closePopup() { popupOverlay.classList.remove('show'); }
+
+// ─── Grammar popup ────────────────────────────────────────────────────────────
+const grammarPopupOverlay = document.getElementById('grammarPopupOverlay');
+
+function showGrammarPopup(grammarId) {
+  const g = GRAMMAR_ANNOTATIONS.find(x => x.id === grammarId);
+  if (!g) return;
+  document.getElementById('grammarPopupLabel').textContent = g.label;
+  document.getElementById('grammarPopupContent').innerHTML = esc(g.content);
+  closePopup();
+  grammarPopupOverlay.classList.add('show');
+}
+function closeGrammarPopup() { grammarPopupOverlay.classList.remove('show'); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closePopup(); closeGrammarPopup(); }
+});
+
+// ─── English text click delegation ───────────────────────────────────────────
+englishText.addEventListener('click', e => {
+  if (e.target.classList.contains('word')) {
+    const parentSeg = e.target.closest('.segment');
+    if (parentSeg && parentSeg.classList.contains('has-grammar')) {
+      showGrammarPopup(parentSeg.dataset.grammarId);
+    } else {
+      showPopup(e.target.textContent.trim());
+    }
+  } else if (e.target.classList.contains('segment')) {
+    const seg = e.target;
+    if (seg.classList.contains('has-grammar')) {
+      showGrammarPopup(seg.dataset.grammarId);
+    } else if (HAS_AUDIO) {
+      seekToSegment(parseInt(seg.dataset.idx));
+    }
+  }
+});
+
+function seekToSegment(idx) {
+  if (!HAS_AUDIO || idx < 0 || idx >= TIMESTAMPS.length) return;
+  audio.currentTime = TIMESTAMPS[idx].start;
+  if (audio.paused) audio.play();
+}
+
+// ─── Audio: highlight & progress ─────────────────────────────────────────────
+let activeIdx = -1;
+
+audio.addEventListener('timeupdate', () => {
+  const t = audio.currentTime;
+  if (audio.duration) {
+    const pct = (t / audio.duration) * 100;
+    progressBar.style.width  = pct + '%';
+    progressThumb.style.left = pct + '%';
+    timeDisplay.textContent  = fmtTime(t) + ' / ' + fmtTime(audio.duration);
+  }
+  let found = -1;
+  for (let i = 0; i < TIMESTAMPS.length; i++) {
+    const s = TIMESTAMPS[i];
+    if (t >= s.start && t <= s.end + 0.15) { found = i; break; }
+  }
+  if (found !== activeIdx) {
+    if (activeIdx >= 0) {
+      const prev = englishText.querySelector(`.segment[data-idx="${activeIdx}"]`);
+      if (prev) prev.classList.remove('active');
+    }
+    activeIdx = found;
+    if (found >= 0) {
+      const cur = englishText.querySelector(`.segment[data-idx="${found}"]`);
+      if (cur) {
+        cur.classList.add('active');
+        cur.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }
+});
+
+audio.addEventListener('ended', () => {
+  btnPlay.innerHTML = '&#9654;';
+  if (activeIdx >= 0) {
+    const el = englishText.querySelector(`.segment[data-idx="${activeIdx}"]`);
+    if (el) el.classList.remove('active');
+    activeIdx = -1;
+  }
+});
+
+audio.addEventListener('loadedmetadata', () => {
+  timeDisplay.textContent = '0:00 / ' + fmtTime(audio.duration);
+});
+
+// ─── Play / Pause ─────────────────────────────────────────────────────────────
+function togglePlay() {
+  if (audio.paused) {
+    audio.play();
+    btnPlay.innerHTML = '&#9646;&#9646;';
+  } else {
+    audio.pause();
+    btnPlay.innerHTML = '&#9654;';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && e.target === document.body) {
+    e.preventDefault();
+    if (HAS_AUDIO) togglePlay();
+  }
+});
+
+// ─── Progress bar seek ────────────────────────────────────────────────────────
+function seekFromEvent(e) {
+  const rect = progressWrap.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+  if (audio.duration) audio.currentTime = ratio * audio.duration;
+}
+let seeking = false;
+progressWrap.addEventListener('mousedown',  e => { seeking = true; seekFromEvent(e); });
+progressWrap.addEventListener('touchstart', e => { seeking = true; seekFromEvent(e); }, { passive: true });
+document.addEventListener('mousemove',  e => { if (seeking) seekFromEvent(e); });
+document.addEventListener('touchmove',  e => { if (seeking) seekFromEvent(e); }, { passive: true });
+document.addEventListener('mouseup',  () => { seeking = false; });
+document.addEventListener('touchend', () => { seeking = false; });
+
+// ─── Scroll-to-top ────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTopBtn').classList.toggle('visible', window.scrollY > 300);
+});
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function fmtTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60).toString().padStart(2, '0');
+  return m + ':' + s;
+}
+function esc(str) {
+  return str
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/\n/g, '<br>');
+}
+</script>
+</body>
+</html>

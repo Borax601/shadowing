@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>シャドーイング — Tribes We Lead</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      color: #e8e8e8;
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* ── App Header ── */
+    .app-header {
+      background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+      border-bottom: 2px solid #e63946;
+      padding: 28px 20px 24px;
+      text-align: center;
+    }
+
+    .app-header-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .app-title {
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: bold;
+      color: #f4d03f;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .app-subtitle {
+      font-size: 13px;
+      color: #8080a0;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #606080;
+      text-transform: uppercase;
+      padding: 24px 20px 10px;
+    }
+
+    /* ── Day grid ── */
+    .day-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 0 16px;
+    }
+
+    @media (min-width: 600px) {
+      .day-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 0 24px; }
+    }
+
+    @media (min-width: 900px) {
+      .day-grid { grid-template-columns: repeat(4, 1fr); max-width: 900px; margin: 0 auto; }
+    }
+
+    /* ── Day card base ── */
+    .day-card {
+      background: #16213e;
+      border: 1px solid #253350;
+      border-radius: 14px;
+      padding: 16px 14px 14px;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      transition: border-color 0.2s, transform 0.1s;
+    }
+
+    /* ── Available cards ── */
+    .day-card--available {
+      border-color: #2d6a4f;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .day-card--available:hover {
+      border-color: #4caf7d;
+      transform: translateY(-2px);
+    }
+    .day-card--available:active { transform: scale(0.97); }
+
+    /* audio-ready: green accent */
+    .day-card--audio .card-day-num { color: #4caf7d; }
+    .day-card--audio { border-color: #2d6a4f; }
+
+    /* text-only: blue accent */
+    .day-card--text-only .card-day-num { color: #6baed6; }
+    .day-card--text-only { border-color: #1e3a5a; }
+
+    /* ── Unavailable cards ── */
+    .day-card--unavailable {
+      opacity: 0.38;
+      cursor: default;
+    }
+    .day-card--unavailable .card-day-num { color: #505070; }
+
+    /* ── Card inner elements ── */
+    .card-day-num {
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .card-title {
+      font-size: 13px;
+      line-height: 1.45;
+      color: #c0c0d8;
+      flex: 1;
+    }
+
+    .day-card--unavailable .card-title { color: #505070; }
+
+    /* Status badges */
+    .card-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      border-radius: 6px;
+      padding: 2px 7px;
+      align-self: flex-start;
+    }
+
+    .badge--audio   { background: rgba(45,106,79,0.35); color: #4caf7d; }
+    .badge--text    { background: rgba(69,123,157,0.3); color: #6baed6; }
+    .badge--review  { background: rgba(230,57,70,0.25); color: #e67a84; }
+    .badge--wait    { background: rgba(50,50,80,0.5);   color: #606080; }
+
+    /* Progress bar at bottom of card for visual interest */
+    .day-card--audio::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, #2d6a4f, #4caf7d);
+      border-radius: 0 0 14px 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-header">
+  <span class="app-header-icon">🎙</span>
+  <div class="app-title">シャドーイング</div>
+  <div class="app-subtitle">Seth Godin: Tribes We Lead</div>
+</div>
+
+<div class="section-label">レッスン一覧</div>
+<div class="day-grid" id="dayGrid"></div>
+
+<script src="lessons_data.js"></script>
+<script>
+// 利用可能なデイ（クリック可能）
+// audio: 音声・ハイライトあり / text: テキストのみ
+const DAY_STATUS = {
+  '1':   'audio',    // day1.mp3 あり
+  '1.5': 'audio',    // day1_5.mp3 あり
+};
+
+// レビューデイの判定
+function isReview(lesson) {
+  return String(lesson.title).includes('REVIEW') || String(lesson.title).includes('FINAL');
+}
+
+const grid = document.getElementById('dayGrid');
+
+LESSONS_DATA.forEach(lesson => {
+  const dayStr = String(lesson.day);
+  const status = DAY_STATUS[dayStr];   // 'audio' | 'text' | undefined
+  const available = !!status;
+  const review = isReview(lesson);
+
+  if (available) {
+    // Clickable link card
+    const a = document.createElement('a');
+    a.href = 'day.html?day=' + encodeURIComponent(dayStr);
+    a.className = 'day-card day-card--available ' +
+                  (status === 'audio' ? 'day-card--audio' : 'day-card--text-only');
+
+    const badge = status === 'audio' ? '音声あり' : '音声準備中';
+    const badgeClass = status === 'audio' ? 'badge--audio' : 'badge--text';
+    const reviewBadge = review
+      ? `<span class="card-badge badge--review">REVIEW</span> ` : '';
+
+    a.innerHTML =
+      `<div class="card-day-num">DAY ${dayStr}</div>` +
+      `<div class="card-title">${esc(lesson.title)}</div>` +
+      reviewBadge +
+      `<span class="card-badge ${badgeClass}">${badge}</span>`;
+
+    grid.appendChild(a);
+  } else {
+    // Non-clickable card
+    const div = document.createElement('div');
+    div.className = 'day-card day-card--unavailable';
+
+    const reviewBadge = review
+      ? `<span class="card-badge badge--review">REVIEW</span> ` : '';
+
+    div.innerHTML =
+      `<div class="card-day-num">DAY ${dayStr}</div>` +
+      `<div class="card-title">${esc(lesson.title)}</div>` +
+      reviewBadge +
+      `<span class="card-badge badge--wait">準備中</span>`;
+
+    grid.appendChild(div);
+  }
+});
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
