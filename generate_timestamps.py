@@ -71,6 +71,39 @@ DAY_CONFIG = {
             "/ most of them / within 24 hours / of being scooped off of the street."
         ),
     },
+    "4": {
+        "audio":  "audio/day4.mp3",
+        "output": "audio/day4_timestamps.json",
+        "english": (
+            "Nathan and his boss saw this, / and they could not tolerate it. //"
+            "So they set out / to make San Francisco / a no-kill city: "
+            "/ create an entire city / where every dog and cat, "
+            "/ unless it was ill or dangerous, / would be adopted, / not killed. //"
+            "And everyone said / it was impossible. //"
+            "Nathan and his boss / went to the city council "
+            "/ to get a change in the ordinance. //"
+            "And people from SPCAs / and humane shelters / around the country "
+            "/ flew to San Francisco / to testify against them -- "
+            "/ to say / it would hurt the movement / and it was inhumane."
+        ),
+    },
+    "6": {
+        "audio":  "audio/day6.mp3",
+        "output": "audio/day6_timestamps.json",
+        "english": (
+            "They persisted. //"
+            "And Nathan went directly / to the community. //"
+            "He connected / with people who cared about this: "
+            "/ nonprofessionals, / people with passion. //"
+            "And within just a couple years, / San Francisco became "
+            "/ the first no-kill city, / running no deficit, "
+            "/ completely supported by the community. //"
+            "Nathan left / and went to Tompkins County, New York -- "
+            "/ a place as different from San Francisco "
+            "/ as you can be / and still be in the United States. //"
+            "And he did it again."
+        ),
+    },
 }
 
 

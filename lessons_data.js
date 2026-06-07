@@ -1596,6 +1596,8 @@ const TIMESTAMPS_MAP = {
   "1.5": [{"index":0,"text":"Shortly after that","start":0.28,"end":1.16},{"index":1,"text":"I got invited","start":1.16,"end":1.88},{"index":2,"text":"to speak","start":1.88,"end":2.8},{"index":3,"text":"at the convention","start":2.8,"end":3.68},{"index":4,"text":"of the people","start":3.68,"end":4.3},{"index":5,"text":"who make balloon animals.","start":4.3,"end":5.94},{"index":6,"text":"And again,","start":6.72,"end":7.06},{"index":7,"text":"I couldn't go.","start":7.1,"end":7.58},{"index":8,"text":"But it's a fascinating group.","start":7.6,"end":8.74},{"index":9,"text":"They make balloon animals.","start":8.88,"end":9.64},{"index":10,"text":"There is a big schism","start":9.64,"end":10.64},{"index":11,"text":"between the ones","start":10.52,"end":11.06},{"index":12,"text":"who make gospel animals","start":11.06,"end":12.2},{"index":13,"text":"and porn animals,","start":12.2,"end":13.18},{"index":14,"text":"but -- (Laughter)","start":13.18,"end":14.18},{"index":15,"text":"they do a lot of really cool stuff","start":14.94,"end":17.3},{"index":16,"text":"with balloons.","start":17.3,"end":17.98},{"index":17,"text":"Sometimes they get in trouble,","start":18.08,"end":19.0},{"index":18,"text":"but not often.","start":19.0,"end":19.78},{"index":19,"text":"And the other thing","start":20.64,"end":21.92},{"index":20,"text":"about these guys is,","start":21.92,"end":22.94},{"index":21,"text":"they also know","start":22.94,"end":23.9},{"index":22,"text":"what they do for a living.","start":23.9,"end":24.94},{"index":23,"text":"They make balloon animals.","start":25.2,"end":27.64}],
   "2":   [{"index":0,"text":"But what do we do","start":0.0,"end":1.16},{"index":1,"text":"for a living?","start":1.16,"end":1.82},{"index":2,"text":"What exactly","start":2.28,"end":3.3},{"index":3,"text":"do the people watching this","start":3.3,"end":4.44},{"index":4,"text":"do every day?","start":4.44,"end":6.46},{"index":5,"text":"And I want to argue","start":6.46,"end":8.34},{"index":6,"text":"that what we do","start":8.34,"end":9.78},{"index":7,"text":"is we try to change everything.","start":9.78,"end":11.76},{"index":8,"text":"That we try to find","start":12.46,"end":13.8},{"index":9,"text":"a piece of the status quo --","start":13.8,"end":14.8},{"index":10,"text":"something that bothers us,","start":15.2,"end":16.34},{"index":11,"text":"something that needs to be improved,","start":16.34,"end":17.6},{"index":12,"text":"something that is itching to be changed --","start":17.6,"end":18.6},{"index":13,"text":"and we change it.","start":20.06,"end":21.24},{"index":14,"text":"We try to make","start":21.56,"end":22.22},{"index":15,"text":"big, permanent, important change.","start":22.22,"end":25.66},{"index":16,"text":"But we don't think about it","start":25.66,"end":27.46},{"index":17,"text":"that way.","start":27.46,"end":27.68}],
   "3":   [{"index":0,"text":"First,","start":0.0,"end":0.38},{"index":1,"text":"about a guy named Nathan Winograd.","start":0.38,"end":1.7},{"index":2,"text":"Nathan was","start":2.72,"end":3.02},{"index":3,"text":"the number two person","start":3.02,"end":3.86},{"index":4,"text":"at the San Francisco SPCA.","start":3.86,"end":5.62},{"index":5,"text":"And what you may not know","start":6.32,"end":7.46},{"index":6,"text":"about the history of the SPCA is,","start":7.46,"end":8.74},{"index":7,"text":"it was founded","start":8.74,"end":9.66},{"index":8,"text":"to kill dogs and cats.","start":9.66,"end":12.08},{"index":9,"text":"Cities gave them a charter","start":13.44,"end":15.22},{"index":10,"text":"to get rid of the stray animals","start":15.22,"end":16.7},{"index":11,"text":"on the street","start":16.7,"end":17.32},{"index":12,"text":"and destroy them.","start":17.32,"end":18.36},{"index":13,"text":"In a typical year","start":19.12,"end":19.94},{"index":14,"text":"four million dogs and cats","start":19.94,"end":21.56},{"index":15,"text":"were killed,","start":21.56,"end":22.08},{"index":16,"text":"most of them","start":22.16,"end":22.72},{"index":17,"text":"within 24 hours","start":22.72,"end":23.82},{"index":18,"text":"of being scooped off of the street.","start":23.82,"end":24.82}],
+  "4":   [{"index":0,"text":"Nathan and his boss saw this,","start":0.0,"end":1.98},{"index":1,"text":"and they could not tolerate it.","start":1.98,"end":4.1},{"index":2,"text":"So they set out","start":4.36,"end":5.2},{"index":3,"text":"to make San Francisco","start":5.2,"end":6.42},{"index":4,"text":"a no-kill city:","start":6.42,"end":7.42},{"index":5,"text":"create an entire city","start":8.78,"end":10.52},{"index":6,"text":"where every dog and cat,","start":10.52,"end":12.0},{"index":7,"text":"unless it was ill or dangerous,","start":12.04,"end":15.58},{"index":8,"text":"would be adopted,","start":16.02,"end":16.72},{"index":9,"text":"not killed.","start":16.82,"end":17.38},{"index":10,"text":"And everyone said","start":17.82,"end":18.54},{"index":11,"text":"it was impossible.","start":18.54,"end":19.36},{"index":12,"text":"Nathan and his boss","start":19.96,"end":20.62},{"index":13,"text":"went to the city council","start":20.62,"end":21.6},{"index":14,"text":"to get a change in the ordinance.","start":21.6,"end":23.24},{"index":15,"text":"And people from SPCAs","start":23.24,"end":24.24},{"index":16,"text":"and humane shelters","start":25.32,"end":25.94},{"index":17,"text":"around the country","start":26.14,"end":26.72},{"index":18,"text":"flew to San Francisco","start":26.72,"end":28.14},{"index":19,"text":"to testify against them --","start":28.14,"end":29.14},{"index":20,"text":"to say","start":31.12,"end":31.68},{"index":21,"text":"it would hurt the movement","start":31.68,"end":33.16},{"index":22,"text":"and it was inhumane.","start":33.16,"end":34.4}],
+  "6":   [{"index":0,"text":"They persisted.","start":0.0,"end":1.76},{"index":1,"text":"And Nathan went directly","start":1.76,"end":3.02},{"index":2,"text":"to the community.","start":3.02,"end":3.82},{"index":3,"text":"He connected","start":4.38,"end":5.02},{"index":4,"text":"with people who cared about this:","start":5.02,"end":6.4},{"index":5,"text":"nonprofessionals,","start":6.4,"end":7.4},{"index":6,"text":"people with passion.","start":7.38,"end":8.24},{"index":7,"text":"And within just a couple years,","start":8.98,"end":10.92},{"index":8,"text":"San Francisco became","start":11.46,"end":12.28},{"index":9,"text":"the first no-kill city,","start":12.28,"end":13.28},{"index":10,"text":"running no deficit,","start":15.66,"end":16.7},{"index":11,"text":"completely supported by the community.","start":17.38,"end":19.1},{"index":12,"text":"Nathan left","start":19.7,"end":20.4},{"index":13,"text":"and went to Tompkins County, New York --","start":20.4,"end":21.4},{"index":14,"text":"a place as different from San Francisco","start":22.4,"end":24.64},{"index":15,"text":"as you can be","start":24.64,"end":25.2},{"index":16,"text":"and still be in the United States.","start":25.2,"end":26.2},{"index":17,"text":"And he did it again.","start":26.2,"end":27.2}],
 };
 
 const GRAMMAR_MAP = {
@@ -1714,6 +1716,38 @@ const GRAMMAR_MAP = {
         "segIndices": [
             17,
             18
+        ]
+    }
+],
+  "4":   [
+    {
+        "id": "g1",
+        "label": "文法①【set out to 不定詞】",
+        "content": "\"set out to make\" は「〜しようと着手する・乗り出す」。start to とほぼ同義ですが、より決意・挑戦のニュアンスがあります。set out on a journey（旅に出る）と同じ set out です。",
+        "segIndices": [
+            2,
+            3
+        ]
+    },
+    {
+        "id": "g2",
+        "label": "文法②【unless の条件節】",
+        "content": "\"unless it was ill or dangerous\" は「病気または危険でない限り」。unless ＝ if ... not と覚えてOK。unless は条件の例外を示すときに使い、otherwise（さもなければ）に近いニュアンスです。",
+        "segIndices": [
+            7,
+            8,
+            9
+        ]
+    },
+    {
+        "id": "g3",
+        "label": "文法⑤【to 不定詞の連続（目的の重ね）】",
+        "content": "\"flew to San Francisco to testify against them — to say it would hurt ...\" は to＋動詞が連続して目的を積み重ねています。最後の to say は to testify の内容をダッシュ（—）で補足説明する形です。",
+        "segIndices": [
+            19,
+            20,
+            21,
+            22
         ]
     }
 ]

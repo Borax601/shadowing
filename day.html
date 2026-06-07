@@ -392,9 +392,9 @@
   </div>
 
   <div id="playerWrap" class="player" style="display:none">
-    <button class="btn-skip" id="btnBack" title="1秒戻す">&#9664; 1秒</button>
+    <button class="btn-skip" id="btnBack" title="2秒戻す">&#9664; 2秒</button>
     <button class="btn-play" id="btnPlay" onclick="togglePlay()" title="再生 / 一時停止">&#9654;</button>
-    <button class="btn-skip" id="btnFwd"  title="1秒進む">1秒 &#9654;</button>
+    <button class="btn-skip" id="btnFwd"  title="2秒進む">2秒 &#9654;</button>
     <div class="progress-wrap" id="progressWrap">
       <div class="progress-bar" id="progressBar"></div>
       <div class="progress-thumb" id="progressThumb"></div>
@@ -681,8 +681,8 @@ function addSkipListener(btnId, sec) {
 }
 
 if (HAS_AUDIO) {
-  addSkipListener('btnBack', -1);
-  addSkipListener('btnFwd',  +1);
+  addSkipListener('btnBack', -2);
+  addSkipListener('btnFwd',  +2);
 }
 
 // ─── Sync offset (同期調整) ───────────────────────────────────────────────────
@@ -714,8 +714,8 @@ function updateHighlight() {
   const t   = audio.currentTime;
   const adj = t + syncOffset;     // オフセット適用済み時刻でセグメント判定
 
-  // プログレスバー更新
-  if (audio.duration) {
+  // プログレスバー更新（ドラッグ中は上書きしない）
+  if (!seeking && audio.duration) {
     const pct = (t / audio.duration) * 100;
     progressBar.style.width  = pct + '%';
     progressThumb.style.left = pct + '%';
@@ -790,19 +790,57 @@ document.addEventListener('keydown', e => {
 });
 
 // ─── Progress bar seek ────────────────────────────────────────────────────────
-function seekFromEvent(e) {
-  const rect = progressWrap.getBoundingClientRect();
+// ドラッグ中はビジュアルのみ更新し、離したタイミングで audio.currentTime を確定する
+let seeking  = false;
+let seekRatio = 0;
+
+function getSeekRatio(e) {
+  const rect   = progressWrap.getBoundingClientRect();
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-  if (audio.duration) audio.currentTime = ratio * audio.duration;
+  return Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
 }
-let seeking = false;
-progressWrap.addEventListener('mousedown',  e => { seeking = true; seekFromEvent(e); });
-progressWrap.addEventListener('touchstart', e => { seeking = true; seekFromEvent(e); }, { passive: true });
-document.addEventListener('mousemove',  e => { if (seeking) seekFromEvent(e); });
-document.addEventListener('touchmove',  e => { if (seeking) seekFromEvent(e); }, { passive: true });
-document.addEventListener('mouseup',  () => { seeking = false; });
-document.addEventListener('touchend', () => { seeking = false; });
+
+function applySeekVisual(ratio) {
+  const pct = ratio * 100;
+  progressBar.style.width  = pct + '%';
+  progressThumb.style.left = pct + '%';
+  if (audio.duration) {
+    timeDisplay.textContent = fmtTime(ratio * audio.duration) + ' / ' + fmtTime(audio.duration);
+  }
+}
+
+function commitSeek() {
+  if (audio.duration) audio.currentTime = seekRatio * audio.duration;
+  seeking = false;
+}
+
+progressWrap.addEventListener('mousedown', e => {
+  seeking   = true;
+  seekRatio = getSeekRatio(e);
+  applySeekVisual(seekRatio);
+});
+
+progressWrap.addEventListener('touchstart', e => {
+  seeking   = true;
+  seekRatio = getSeekRatio(e);
+  applySeekVisual(seekRatio);
+}, { passive: true });
+
+document.addEventListener('mousemove', e => {
+  if (!seeking) return;
+  seekRatio = getSeekRatio(e);
+  applySeekVisual(seekRatio);
+});
+
+document.addEventListener('touchmove', e => {
+  if (!seeking) return;
+  e.preventDefault();
+  seekRatio = getSeekRatio(e);
+  applySeekVisual(seekRatio);
+}, { passive: false });
+
+document.addEventListener('mouseup',  () => { if (seeking) commitSeek(); });
+document.addEventListener('touchend', () => { if (seeking) commitSeek(); });
 
 // ─── Scroll-to-top ────────────────────────────────────────────────────────────
 window.addEventListener('scroll', () => {
