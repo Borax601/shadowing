@@ -87,6 +87,26 @@ DAY_CONFIG = {
             "/ to say / it would hurt the movement / and it was inhumane."
         ),
     },
+    "7": {
+        "audio":  "audio/day7.mp3",
+        "output": "audio/day7_timestamps.json",
+        "english": (
+            "And when I think about / what Nathan did, "
+            "/ and when I think about / what people here do, "
+            "/ I think about ideas. //"
+            "And I think about the idea / that creating an idea, "
+            "/ spreading an idea / has a lot behind it. //"
+            "I don't know / if you've ever been / to a Jewish wedding, "
+            "/ but what they do is, / they take a light bulb / and they smash it. //"
+            "Now there is a bunch of reasons / for that. //"
+            "But one reason is / because it indicates a change, "
+            "/ from before to after. //"
+            "It is a moment in time. //"
+            "And I want to argue / that we are living through "
+            "/ and are right at / the key moment / of a change "
+            "/ in the way ideas are created / and spread / and implemented."
+        ),
+    },
     "6": {
         "audio":  "audio/day6.mp3",
         "output": "audio/day6_timestamps.json",
