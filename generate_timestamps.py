@@ -87,6 +87,42 @@ DAY_CONFIG = {
             "/ to say / it would hurt the movement / and it was inhumane."
         ),
     },
+    "9": {
+        "audio":  "audio/day9.mp3",
+        "output": "audio/day9_timestamps.json",
+        "english": (
+            "So let me tell you / about the three cycles. //"
+            "The first one is / the factory cycle. //"
+            "Henry Ford / comes up with a really cool idea. //"
+            "It enables him / to hire men "
+            "/ who used to get paid 50 cents a day "
+            "/ and pay them / five dollars a day. //"
+            "Because he's got / an efficient enough factory. //"
+            "Well with that sort of advantage / you can churn out / a lot of cars. //"
+            "You can make a lot of change. //"
+            "You can get roads built. //"
+            "The essence of what you're doing / is you need "
+            "/ ever-cheaper labor, / and ever-faster machines. //"
+            "And the problem we've run into is, / we're running out of both."
+        ),
+    },
+    "8": {
+        "audio":  "audio/day8.mp3",
+        "output": "audio/day8_timestamps.json",
+        "english": (
+            "We started / with the factory idea: "
+            "/ that you could change the whole world "
+            "/ if you had an efficient factory / that could churn out change. //"
+            "We then went to the TV idea, / that said "
+            "/ if you had a big enough mouthpiece, "
+            "/ if you could get on TV / enough times, "
+            "/ if you could buy enough ads, / you could win. //"
+            "And now we're in / this new model of leadership, "
+            "/ where the way we make change "
+            "/ is not by using money or power / to lever a system, "
+            "/ but by leading."
+        ),
+    },
     "7": {
         "audio":  "audio/day7.mp3",
         "output": "audio/day7_timestamps.json",

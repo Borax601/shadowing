@@ -790,13 +790,13 @@ document.addEventListener('keydown', e => {
 });
 
 // ─── Progress bar seek ────────────────────────────────────────────────────────
-// ドラッグ中はビジュアルのみ更新し、離したタイミングで audio.currentTime を確定する
-let seeking  = false;
+// Pointer Events + setPointerCapture でマウス・タッチ両対応の安定ドラッグ
+// setPointerCapture により、バーの外にはみ出ても確実にイベントを受け取る
+let seeking   = false;
 let seekRatio = 0;
 
-function getSeekRatio(e) {
-  const rect   = progressWrap.getBoundingClientRect();
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+function getRatioFromX(clientX) {
+  const rect = progressWrap.getBoundingClientRect();
   return Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
 }
 
@@ -814,33 +814,29 @@ function commitSeek() {
   seeking = false;
 }
 
-progressWrap.addEventListener('mousedown', e => {
-  seeking   = true;
-  seekRatio = getSeekRatio(e);
-  applySeekVisual(seekRatio);
-});
-
-progressWrap.addEventListener('touchstart', e => {
-  seeking   = true;
-  seekRatio = getSeekRatio(e);
-  applySeekVisual(seekRatio);
-}, { passive: true });
-
-document.addEventListener('mousemove', e => {
-  if (!seeking) return;
-  seekRatio = getSeekRatio(e);
-  applySeekVisual(seekRatio);
-});
-
-document.addEventListener('touchmove', e => {
-  if (!seeking) return;
+progressWrap.addEventListener('pointerdown', e => {
   e.preventDefault();
-  seekRatio = getSeekRatio(e);
+  progressWrap.setPointerCapture(e.pointerId); // バー外ドラッグも追従
+  seeking   = true;
+  seekRatio = getRatioFromX(e.clientX);
   applySeekVisual(seekRatio);
-}, { passive: false });
+});
 
-document.addEventListener('mouseup',  () => { if (seeking) commitSeek(); });
-document.addEventListener('touchend', () => { if (seeking) commitSeek(); });
+progressWrap.addEventListener('pointermove', e => {
+  if (!seeking) return;
+  seekRatio = getRatioFromX(e.clientX);
+  applySeekVisual(seekRatio);
+});
+
+progressWrap.addEventListener('pointerup', e => {
+  if (!seeking) return;
+  seekRatio = getRatioFromX(e.clientX);
+  commitSeek();
+});
+
+progressWrap.addEventListener('pointercancel', () => {
+  seeking = false;
+});
 
 // ─── Scroll-to-top ────────────────────────────────────────────────────────────
 window.addEventListener('scroll', () => {
